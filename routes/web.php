@@ -33,3 +33,5 @@ Route::get('logout',[LoginController::class,'logout'])->name('logout');
 Route::get('absensiKamera', [App\Http\Controllers\AbsensiKameraController::class, 'index'])->middleware('auth')->name('absensiKamera');
 Route::post('absensiKamera/upload', [App\Http\Controllers\AbsensiKameraController::class, 'upload'])->middleware('auth')->name('absensiKamera.upload');
 
+//data karyawan
+Route::get('admin/karyawan', [App\Http\Controllers\KaryawanController::class, 'index'])->name('admin.karyawan');

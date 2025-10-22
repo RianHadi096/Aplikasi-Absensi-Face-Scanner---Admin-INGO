@@ -21,6 +21,12 @@ return new class extends Migration
             $table->timestamps();
             $table->rememberToken();
         });
+
+        //buat kolom tambahan dengan create_profile_karyawan_id_foreign
+        Schema::table('users',function (Blueprint $table){
+            $table->unsignedBigInteger('profile_karyawan_id')->nullable();
+            $table->foreign('profile_karyawan_id')->references('id')->on('profile_karyawan')->onDelete('set null');
+        });
     }
 
     /**
