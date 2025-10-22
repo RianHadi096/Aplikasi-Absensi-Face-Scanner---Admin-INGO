@@ -44,7 +44,7 @@
         <div class="container">
             <div class="text-center"><h2 class="mt-5">Main Menu</h2></div>
                 <div class="d-flex flex-row justify-content-center">
-                    <a class="btn btn-outline-dark m-2" href="#" role="button">Kelola Karyawan <i class="fa fa-user" aria-hidden="true"></i></a>
+                    <a class="btn btn-outline-dark m-2" href="{{ route('admin.karyawan') }}" role="button">Kelola Karyawan <i class="fa fa-user" aria-hidden="true"></i></a>
                     <a class="btn btn-outline-dark m-2" href="#" role="button">Settings <i class="fa fa-cog" aria-hidden="true"></i></a>
             </div>
         </div>

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Karyawan extends Model
 {
@@ -15,5 +16,10 @@ class Karyawan extends Model
         'bagian',
         'tanggal_masuk_kerja',
         'nomor_handphone',
+    ];
+
+    protected $casts = [
+        'tanggal_lahir' => 'date',
+        'tanggal_masuk_kerja' => 'date',
     ];
 }
