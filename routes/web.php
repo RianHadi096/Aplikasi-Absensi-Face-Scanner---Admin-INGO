@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\LoginController;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\AbsensiKameraController;
+use App\Http\Controllers\KaryawanController;
 
 Route::get('/', [LoginController::class, 'showLoginForm']);
 
@@ -24,14 +26,17 @@ Route::get('karyawan/dashboard', function () {
 
 Route::get('admin/dashboard', function(){
     return view('dashboard_admin');
-});
+})->name('admin_dashboard');
 
 //logout
 Route::get('logout',[LoginController::class,'logout'])->name('logout');
 
 //absensi kamera
-Route::get('absensiKamera', [App\Http\Controllers\AbsensiKameraController::class, 'index'])->middleware('auth')->name('absensiKamera');
-Route::post('absensiKamera/upload', [App\Http\Controllers\AbsensiKameraController::class, 'upload'])->middleware('auth')->name('absensiKamera.upload');
+Route::get('absensiKamera', [AbsensiKameraController::class, 'index'])->middleware('auth')->name('absensiKamera');
+Route::post('absensiKamera/upload', [AbsensiKameraController::class, 'upload'])->middleware('auth')->name('absensiKamera.upload');
 
 //data karyawan
-Route::get('admin/karyawan', [App\Http\Controllers\KaryawanController::class, 'index'])->name('admin.karyawan');
+Route::get('admin/karyawan', [KaryawanController::class, 'index'])->name('admin.karyawan');
+
+//tambah data karyawan
+Route::post('admin/tambahkaryawan/proses',[KaryawanController::class,'prosesTambahKaryawan'])->name('prosesTambahKaryawan');
