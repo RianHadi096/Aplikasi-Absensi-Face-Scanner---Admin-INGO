@@ -24,14 +24,22 @@
         height: 60px; /* Height of the footer */
         background-color: #f5f5f5;
     }
+    .hide-on-small {
+        display: inline;
+    }
+    @media (max-width: 500px) {
+        .hide-on-small {
+            display: none;
+        }
+    }
 </style>
 
 <body>
     <nav>
         <div class="container-fluid bg-light">
             <div class="d-flex flex-row-reverse p-2">
-                <a class="btn btn-outline-dark" href="{{ route('logout') }}" role="button">Log out <i class="fa fa-sign-out" aria-hidden="true"></i></a>
-                <a class="btn btn-outline-dark mr-1" href="{{ route('dashboard') }}" role="button">Main Menu <i class="fa fa-list-ol" aria-hidden="true"></i></a>
+                <a class="btn btn-outline-dark" href="{{ route('logout') }}" role="button"><span class="hide-on-small">Log out </span><i class="fa fa-sign-out" aria-hidden="true"></i></a>
+                <a class="btn btn-outline-dark mr-1" href="{{ route('dashboard') }}" role="button"><span class="hide-on-small">Main Menu </span><i class="fa fa-list-ol" aria-hidden="true"></i></a>
             </div>
         </div>
     </nav>

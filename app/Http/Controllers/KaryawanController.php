@@ -38,7 +38,7 @@ class KaryawanController extends Controller
         ]);
         return redirect()->route('admin.karyawan')->with('message', 'Data Karyawan Berhasil Ditambahkan.');
     }
-    protected function generateUsername($namaLengkap)
+    private function generateUsername($namaLengkap)
     {
         // Hapus spasi dan ubah ke huruf kecil
         $username = strtolower(str_replace(' ', '', $namaLengkap));
@@ -49,5 +49,27 @@ class KaryawanController extends Controller
             $username .= $count + 1;
         }
         return $username;
+    }
+    public function hapusKaryawan($id){
+        //cari data karyawan berdasarkan id
+        $karyawan = Karyawan::find($id);
+        //hapus data karyawan
+        $karyawan->delete();
+        return redirect()->route('admin.karyawan')->with('message', 'Data Karyawan Berhasil Dihapus.');
+    }
+    public function prosesUpdateKaryawan(Request $request){
+        //cari data karyawan berdasarkan id
+        $karyawan = Karyawan::find($request->id);
+        //update data karyawan
+        $karyawan->update([
+            'nama_lengkap' => $request->nama_lengkap,
+            'tanggal_lahir' => $request->tanggal_lahir,
+            'NIK' => $request->NIK,
+            'bagian' => $request->bagian,
+            'jabatan' => $request->jabatan,
+            'tanggal_masuk_kerja' => $request->tanggal_masuk_kerja,
+            'nomor_handphone' => $request->nomor_handphone,
+        ]);
+        return redirect()->route('admin.karyawan')->with('message', 'Data Karyawan Berhasil Diupdate.');
     }
 }
