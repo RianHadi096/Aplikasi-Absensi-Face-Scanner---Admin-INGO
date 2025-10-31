@@ -14,8 +14,10 @@ class Karyawan extends Model
         'tanggal_lahir',
         'NIK',
         'bagian',
+        'jabatan',
         'tanggal_masuk_kerja',
         'nomor_handphone',
+        'imageFileLocation',
     ];
 
     protected $casts = [

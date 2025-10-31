@@ -1,3 +1,3 @@
-- [ ] Update view to format dates in dd/mm/yyyy using Carbon
-- [ ] Fix controller to save all correct fields
-- [ ] Add date casts in model
+- [x] Add form fields to edit modal in user_management.blade.php
+- [x] Add JavaScript to populate form fields on select change
+- [ ] Test the edit functionality

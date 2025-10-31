@@ -13,21 +13,36 @@ class KaryawanController extends Controller
         $karyawans = Karyawan::all();
         return view('admin.user_management', compact('karyawans'));
     }
-    public function prosesTambahKaryawan(){
+    public function prosesTambahKaryawan(Request $request){
+        //validasi data karyawan
+        $request->validate([
+            'nama_lengkap' => 'required|string|max:255',
+            'tanggal_lahir' => 'required|date',
+            'NIK' => 'required|string|max:50|unique:profile_karyawan,NIK',
+            'bagian' => 'required|string|max:100',
+            'jabatan' => 'required|string|max:100',
+            'tanggal_masuk_kerja' => 'required|date',
+            'nomor_handphone' => 'required|string|max:20',
+            'imageFileLocation' => 'nullable|image|mimes:jpg,png|max:3072',
+        ]);
+
         //panggil model Karyawan
         $karyawan = new Karyawan();
+
         //request get data dari form tambah karyawan
         $karyawan::Create([
-            'nama_lengkap' => request('nama_lengkap'),
-            'tanggal_lahir' => request('tanggal_lahir'),
-            'NIK' => request('NIK'),
-            'bagian' => request('bagian'),
-            'tanggal_masuk_kerja' => request('tanggal_masuk_kerja'),
-            'nomor_handphone' => request('nomor_handphone'),
+            'nama_lengkap' => $request->nama_lengkap,
+            'tanggal_lahir' => $request->tanggal_lahir,
+            'NIK' => $request->NIK,
+            'bagian' => $request->bagian,
+            'jabatan' => $request->jabatan,
+            'tanggal_masuk_kerja' => $request->tanggal_masuk_kerja,
+            'nomor_handphone' => $request->nomor_handphone,
+            'imageFileLocation' => $request->hasFile('imageFileLocation') ? $request->file('imageFileLocation')->store('karyawan_images', 'public') : null,
         ]);
 
         //membuat username dan password otomatis dari nama_lengkap
-        $username = $this->generateUsername(request('nama_lengkap'));
+        $username = $this->generateUsername($request->nama_lengkap);
         $password = 'ingoo123'; // Password default
         //simpan data user baru di tabel users
         $user = new RegisterUser();
@@ -38,7 +53,7 @@ class KaryawanController extends Controller
         ]);
         return redirect()->route('admin.karyawan')->with('message', 'Data Karyawan Berhasil Ditambahkan.');
     }
-    protected function generateUsername($namaLengkap)
+    private function generateUsername($namaLengkap)
     {
         // Hapus spasi dan ubah ke huruf kecil
         $username = strtolower(str_replace(' ', '', $namaLengkap));
@@ -49,5 +64,48 @@ class KaryawanController extends Controller
             $username .= $count + 1;
         }
         return $username;
+    }
+    public function hapusKaryawan(Request $request){
+        //ambil data karyawan dari select option
+        $karyawan = Karyawan::find($request->select_karyawan_hapus);
+        if ($karyawan) {
+            $karyawan->delete();
+            return redirect()->route('admin.karyawan')->with('message', 'Data Karyawan Berhasil Dihapus.');
+        } else {
+            return redirect()->route('admin.karyawan')->with('error', 'Data Karyawan Tidak Ditemukan.');
+        }
+    }
+    public function prosesUpdateKaryawan(Request $request){
+        //cari data karyawan berdasarkan id
+        $karyawan = Karyawan::find($request->id);
+
+        //validasi foto jpg/png dan maksimal file 3MB
+        $request->validate([
+            'nama_lengkap' => 'required|string|max:255',
+            'tanggal_lahir' => 'required|date',
+            'NIK' => 'required|string|max:50',
+            'bagian' => 'required|string|max:100',
+            'jabatan' => 'required|string|max:100',
+            'tanggal_masuk_kerja' => 'required|date',
+            'nomor_handphone' => 'required|string|max:20',
+            'imageFileLocation' => 'nullable|image|mimes:jpg,png|max:3072',
+        ]);
+        //update foto dengan string lokasi file jika ada file yang diupload
+        if ($request->hasFile('imageFileLocation')) {
+            $karyawan->imageFileLocation = $request->file('imageFileLocation')->store('karyawan_images', 'public');
+        }
+
+        //update data karyawan dan foto jika ada
+        $karyawan->update([
+            'nama_lengkap' => $request->nama_lengkap,
+            'tanggal_lahir' => $request->tanggal_lahir,
+            'NIK' => $request->NIK,
+            'bagian' => $request->bagian,
+            'jabatan' => $request->jabatan,
+            'tanggal_masuk_kerja' => $request->tanggal_masuk_kerja,
+            'nomor_handphone' => $request->nomor_handphone,
+            'imageFileLocation' => $karyawan->imageFileLocation,
+        ]);
+        return redirect()->route('admin.karyawan')->with('message', 'Data Karyawan Berhasil Diupdate.');
     }
 }
