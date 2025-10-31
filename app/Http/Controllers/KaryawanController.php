@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 use App\Models\Karyawan;
 use App\Models\RegisterUser;
 
@@ -11,7 +13,12 @@ class KaryawanController extends Controller
     public function index(){
         //get all data karyawan
         $karyawans = Karyawan::all();
-        return view('admin.user_management', compact('karyawans'));
+        //rekam dengan json encode
+        $karyawansJson = json_encode($karyawans);
+
+
+        return view('admin.user_management', compact('karyawans', 'karyawansJson'));
+
     }
     public function prosesTambahKaryawan(Request $request){
         //validasi data karyawan
@@ -30,6 +37,11 @@ class KaryawanController extends Controller
         $karyawan = new Karyawan();
 
         //request get data dari form tambah karyawan
+        if ($request->hasFile('imageFileLocation')) {
+            $path = $request->file('imageFileLocation')->store('karyawan_images', 'public');
+            Log::info('Image stored at: ' . $path);
+        }
+        
         $karyawan::Create([
             'nama_lengkap' => $request->nama_lengkap,
             'tanggal_lahir' => $request->tanggal_lahir,
@@ -38,7 +50,7 @@ class KaryawanController extends Controller
             'jabatan' => $request->jabatan,
             'tanggal_masuk_kerja' => $request->tanggal_masuk_kerja,
             'nomor_handphone' => $request->nomor_handphone,
-            'imageFileLocation' => $request->hasFile('imageFileLocation') ? $request->file('imageFileLocation')->store('karyawan_images', 'public') : null,
+            'imageFileLocation' => $request->hasFile('imageFileLocation') ? $path : null,
         ]);
 
         //membuat username dan password otomatis dari nama_lengkap
@@ -92,6 +104,10 @@ class KaryawanController extends Controller
         ]);
         //update foto dengan string lokasi file jika ada file yang diupload
         if ($request->hasFile('imageFileLocation')) {
+            // delete old image from public disk if it exists
+            if ($karyawan->imageFileLocation && Storage::disk('public')->exists($karyawan->imageFileLocation)) {
+                Storage::disk('public')->delete($karyawan->imageFileLocation);
+            }
             $karyawan->imageFileLocation = $request->file('imageFileLocation')->store('karyawan_images', 'public');
         }
 

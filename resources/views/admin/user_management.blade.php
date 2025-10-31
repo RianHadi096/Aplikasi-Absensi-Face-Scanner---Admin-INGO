@@ -39,7 +39,7 @@
     <nav>
         <div class="container-fluid bg-light">
             <div class="d-flex flex-row-reverse p-2">
-                <a class="btn btn-outline-dark ml-2" href="#" role="button"><i class="fas fa-sign-out-alt"></i><span class="hide-on-small"> Logout</span></a>
+                <a class="btn btn-outline-dark ml-2" href="{{ route('logout') }}" role="button"><i class="fas fa-sign-out-alt"></i><span class="hide-on-small"> Logout</span></a>
                 <div class="dropdown">
                     <button
                         class="btn btn-outline-dark dropdown-toggle"
@@ -56,7 +56,7 @@
                         <a class="dropdown-item" href="editkaryawan" data-bs-toggle="modal" data-bs-target="#my-modal-edit-karyawan"><i class="fa fa-user-circle-o" aria-hidden="true"></i><i class="fa fa-pencil" aria-hidden="true"></i> Edit Karyawan </a>
                         <a class="dropdown-item" href="hapuskaryawan" data-bs-toggle="modal" data-bs-target="#my-modal-hapus-karyawan"><i class="fa fa-user-circle-o" aria-hidden="true"></i><i class="fa fa-trash" aria-hidden="true"></i> Hapus Karyawan </a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#"><i class="fa fa-arrow-left" aria-hidden="true"></i> Kembali ke Main Menu</a>
+                        <a class="dropdown-item" href="{{ route('admin_dashboard') }}"><i class="fa fa-arrow-left" aria-hidden="true"></i> Kembali ke Main Menu</a>
                     </div>
                 </div>
             </div>
@@ -109,9 +109,11 @@
                                             <th>Foto Karyawan</th>
                                             <td class="text-center">
                                                 @if ($karyawan->imageFileLocation)
-                                                    <img src="{{ asset('storage/' . $karyawan->imageFileLocation) }}" alt="Foto Karyawan" style="max-width: 150px; max-height: 150px;">
+                                                    <div class="d-flex justify-content-center">
+                                                        <img src="{{ asset('storage/' . $karyawan->imageFileLocation) }}" alt="Foto Karyawan" style="max-width: 200px; max-height: 200px;">
+                                                    </div>
                                                 @else
-                                                    Tidak ada foto
+                                                    <span>Tidak ada foto</span>
                                                 @endif
                                             </td>
                                         </tr>
@@ -129,7 +131,7 @@
             <div class="modal-content">
                 <div class="modal-body">
                     <h1 class="modal-title mb-3 font-semibold text-center">Form Tambah Karyawan<h1>
-                        <form action="{{ route('prosesTambahKaryawan') }}" method="post">
+                        <form action="{{ route('prosesTambahKaryawan') }}" method="post" enctype="multipart/form-data">
                             @csrf
                             <div class="mb-3">
                                 <label for="nama_lengkap" class="form-label">Nama Lengkap</label>
@@ -277,15 +279,14 @@
         var myModalHapusKaryawan = new bootstrap.Modal(document.getElementById('my-modal-hapus-karyawan'), {
             keyboard: false
         });
+        //fetch data karyawans dengan response json
+        const karyawans = @json($karyawans);
 
-        // Data karyawans for edit modal
-        const karyawans = $karyawans;
-
-        // Handle select change to populate form
+        //edit karyawan dengan ambil id modal my-modal-edit-karyawan
         document.getElementById('select_karyawan').addEventListener('change', function() {
             const selectedId = this.value;
             if (selectedId) {
-                const selectedKaryawan = karyawans.find(k => k.id == selectedId);
+                const selectedKaryawan = karyawans.find(karyawan => karyawan.id == selectedId);
                 if (selectedKaryawan) {
                     document.getElementById('edit_id').value = selectedKaryawan.id;
                     document.getElementById('edit_nama_lengkap').value = selectedKaryawan.nama_lengkap;
@@ -317,6 +318,7 @@
             }
         });
 
+
         // Preview image for edit
         document.getElementById('edit_imageFileLocation').addEventListener('change', function(event) {
             const file = event.target.files[0];
@@ -329,6 +331,21 @@
                 reader.readAsDataURL(file);
             } else {
                 document.getElementById('edit-preview-image').style.display = 'none';
+            }
+        });
+
+        // Preview image for tambah karyawan
+        document.getElementById('imageFileLocation').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('preview-image').src = e.target.result;
+                    document.getElementById('preview-image').style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            } else {
+                document.getElementById('preview-image').style.display = 'none';
             }
         });
 
