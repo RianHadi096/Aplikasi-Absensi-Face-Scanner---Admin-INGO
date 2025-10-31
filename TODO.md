@@ -1,5 +1,3 @@
-- [x] Modify the edit button in user_management.blade.php to include data attributes for karyawan details
-- [x] Remove the @foreach loop from the edit modal in user_management.blade.php
-- [x] Add a hidden input for karyawan ID in the edit form
-- [x] Add JavaScript to populate the edit form dynamically when the modal is opened
-- [ ] Test the edit functionality to ensure only the selected karyawan is edited
+- [x] Add form fields to edit modal in user_management.blade.php
+- [x] Add JavaScript to populate form fields on select change
+- [ ] Test the edit functionality

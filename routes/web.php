@@ -42,7 +42,7 @@ Route::get('admin/karyawan', [KaryawanController::class, 'index'])->name('admin.
 Route::post('admin/tambahkaryawan/proses',[KaryawanController::class,'prosesTambahKaryawan'])->name('prosesTambahKaryawan');
 
 //hapus data karyawan
-Route::get('admin/hapuskaryawan/{id}', [KaryawanController::class, 'hapusKaryawan'])->name('hapusKaryawan');
+Route::get('admin/hapuskaryawan', [KaryawanController::class, 'hapusKaryawan'])->name('hapusKaryawan');
 
 //update data karyawan
 Route::post('admin/updatekaryawan/proses',[KaryawanController::class,'prosesUpdateKaryawan'])->name('prosesEditKaryawan');
