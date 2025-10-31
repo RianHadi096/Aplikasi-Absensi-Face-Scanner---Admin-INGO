@@ -51,9 +51,12 @@
         </div>
         <div class="container">
             <div class="text-center"><h2 class="mt-5">Main Menu</h2></div>
-                <div class="d-flex flex-row justify-content-center">
-                    <a class="btn btn-outline-dark m-2" href="{{ route('admin.karyawan') }}" role="button">Kelola Karyawan <i class="fa fa-user" aria-hidden="true"></i></a>
-                    <a class="btn btn-outline-dark m-2" href="#" role="button">Settings <i class="fa fa-cog" aria-hidden="true"></i></a>
+                <div class="d-flex flex-column justify-content-center">
+                    <a class="btn btn-outline-dark m-2" href="{{ route('admin.karyawan') }}" role="button"><i class="fa fa-user" aria-hidden="true"></i> Kelola Karyawan</a>
+                    <a class="btn btn-outline-dark m-2" href="{{ route('histori_absensi_karyawan') }}" role="button"><i class="fa fa-user" aria-hidden="true"></i><i class="fa fa-book" aria-hidden="true"></i> Kelola Histori Absensi Karyawan</a>
+                    
+                    <a class="btn btn-outline-dark m-2" href="#" role="button"><i class="fa fa-cog" aria-hidden="true"></i> Pengaturan</a>
+                </div>
             </div>
         </div>
     </main>

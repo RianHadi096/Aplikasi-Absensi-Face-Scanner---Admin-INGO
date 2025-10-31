@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\LoginController;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\AbsensiKameraController;
+use App\Http\Controllers\AbsensiKaryawanController;
 use App\Http\Controllers\KaryawanController;
 
 Route::get('/', [LoginController::class, 'showLoginForm']);
@@ -32,8 +32,9 @@ Route::get('admin/dashboard', function(){
 Route::get('logout',[LoginController::class,'logout'])->name('logout');
 
 //absensi kamera
-Route::get('absensiKamera', [AbsensiKameraController::class, 'index'])->middleware('auth')->name('absensiKamera');
-Route::post('absensiKamera/upload', [AbsensiKameraController::class, 'upload'])->middleware('auth')->name('absensiKamera.upload');
+Route::get('absensiKamera', [AbsensiKaryawanController::class, 'index'])->middleware('auth')->name('absensiKamera');
+Route::post('absensiKamera/upload', [AbsensiKaryawanController::class, 'upload'])->middleware('auth')->name('absensiKamera.upload');
+
 
 //data karyawan
 Route::get('admin/karyawan', [KaryawanController::class, 'index'])->name('admin.karyawan');
@@ -46,3 +47,6 @@ Route::get('admin/hapuskaryawan', [KaryawanController::class, 'hapusKaryawan'])-
 
 //update data karyawan
 Route::post('admin/updatekaryawan/proses',[KaryawanController::class,'prosesUpdateKaryawan'])->name('prosesEditKaryawan');
+
+//histori absensi karyawan
+Route::get('admin/histori_absensi_karyawan', [AbsensiKaryawanController::class, 'historyAbsensi'])->name('histori_absensi_karyawan');
